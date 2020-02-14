@@ -16,7 +16,7 @@ setRoutingStore(routingStore)
 
 const routes = {
   search: '/search',
-  citySearch: '/regions/:region'
+  citySearch: '/cities/:city'
 }
 
 class DemoSearchStore {
