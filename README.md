@@ -46,7 +46,7 @@ class DemoSearchStore {
       format: _formatDate,
     })
     
-    setRegion = (city: Maybe<string>) => {
+    setCity = (city: Maybe<string>) => {
       // For updating the current route, push() and replace() methods are available:
       // - push: will add the new url to the browsing history
       // - replace: will replace the current url on the browsing history
