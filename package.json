@@ -1,0 +1,38 @@
+{
+  "name": "mobx-react-router-utils",
+  "version": "1.0.27",
+  "description": "",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "pub": "tsc && yarn publish"
+  },
+  "repository": {
+    "url": "https://github.com/wellguimaraes/mobx-react-router-utils",
+    "type": "git"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/history": "^4.7.5",
+    "@types/lodash": "^4.14.149",
+    "@types/memoizee": "^0.4.3",
+    "@types/query-string": "^6.3.0",
+    "lodash": "^4.17.15",
+    "memoizee": "^0.4.14",
+    "path-to-regexp": "^6.1.0",
+    "query-string": "^6.11.0"
+  },
+  "devDependencies": {
+    "history": "^4.10.1",
+    "mobx": "^5.15.4",
+    "mobx-react-router": "^4.1.0",
+    "typescript": "^3.7.5"
+  },
+  "peerDependencies": {
+    "history": "^4.10.1",
+    "mobx": "^5.15.4",
+    "mobx-react-router": "^4.1.0"
+  }
+}
