@@ -24,8 +24,9 @@ class DemoSearchStore {
       patterns: [routes.citySearch],
     })
     
+    // this one will come from the query string
     checkIn = computedRouteParam('checkIn', {
-      // Define the matching patterns
+      // Define the route patterns for which this one is valid
       patterns: [routes.search, routes.citySearch],
       
       // Set a parsing fn to transform from string
