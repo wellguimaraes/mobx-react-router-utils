@@ -16,7 +16,7 @@ setRoutingStore(routingStore)
 
 const routes = {
   search: '/search',
-  citySearch: '/regions/:region'
+  citySearch: '/cities/:city'
 }
 
 class DemoSearchStore {
@@ -24,8 +24,9 @@ class DemoSearchStore {
       patterns: [routes.citySearch],
     })
     
+    // this one will come from the query string
     checkIn = computedRouteParam('checkIn', {
-      // Define the matching patterns
+      // Define the route patterns for which this one is valid
       patterns: [routes.search, routes.citySearch],
       
       // Set a parsing fn to transform from string
@@ -45,7 +46,7 @@ class DemoSearchStore {
       format: _formatDate,
     })
     
-    setRegion = (city: Maybe<string>) => {
+    setCity = (city: Maybe<string>) => {
       // For updating the current route, push() and replace() methods are available:
       // - push: will add the new url to the browsing history
       // - replace: will replace the current url on the browsing history
