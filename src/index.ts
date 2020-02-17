@@ -82,7 +82,7 @@ export const interpolateUrl = (pattern: string, params: any) => {
   return toPath(pathParams) + (query && ensureLeft(query, '?'))
 }
 
-export const computedRouteParam = <T>(
+export const computedRouteParam = <T = string>(
   paramName: string,
   { patterns: routePatterns, parse, format, defaultValue }: ComputedRouteOptions<T>
 ) => {
