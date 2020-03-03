@@ -82,69 +82,70 @@ export const interpolateUrl = (pattern: string, params: any) => {
   return toPath(pathParams) + (query && ensureLeft(query, '?'))
 }
 
-export const computedRouteParam = <T = string>(
-  paramName: string,
-  { patterns: routePatterns, parse, format, defaultValue }: ComputedRouteOptions<T>
-) => {
-  const routeParams = getComputedRouteParams(routePatterns)
-  const routePatternsWithRegex = routePatterns.map(it => ({ pattern: it, regex: pathToRegexp(it) }))
+function computedRouteParam<T = string>({ patterns: routePatterns, parse, format, defaultValue }: ComputedRouteOptions<T>) {
+  return <T = string>(target: Object | string, key: string, baseDescriptor: PropertyDescriptor): void => {
+    const routeParams = getComputedRouteParams(routePatterns)
+    const routePatternsWithRegex = routePatterns.map(it => ({ pattern: it, regex: pathToRegexp(it) }))
 
-  const computedValue = computed(() => {
-    const params: any = routeParams.get()
-    const paramValue = params && params[paramName]
+    const computedValue = computed(() => {
+      const params: any = routeParams.get()
+      const paramValue = params && params[key]
 
-    let typedParamValue
+      let typedParamValue
 
-    try {
-      typedParamValue = paramValue && parse ? parse(paramValue) : paramValue
-    } catch (err) {
-      console.error(err)
-    }
-
-    const paramValueIsEmpty = typedParamValue === undefined || typedParamValue === '' || typedParamValue === null
-
-    return paramValueIsEmpty ? defaultValue : typedParamValue
-  }) as ComputedRouteParam<T>
-
-  computedValue._paramName = paramName
-
-  const setRouteParamWith = (setter: (url: string) => void) => (newValue: any, options = {} as SetRouteParamOptions) => {
-    let currentPattern
-
-    if (options && options.pattern) {
-      currentPattern = { pattern: options.pattern }
-    } else {
-      switch (routePatterns.length) {
-        case 0:
-          currentPattern = { pattern: _routingStore.location.pathname }
-          break
-
-        case 1:
-          currentPattern = routePatternsWithRegex[0]
-          break
-
-        default:
-          currentPattern = routePatternsWithRegex.find(it => it.regex.test(_routingStore.location.pathname))
-          break
+      try {
+        typedParamValue = paramValue && parse ? parse(paramValue) : paramValue
+      } catch (err) {
+        console.error(err)
       }
+
+      const paramValueIsEmpty = typedParamValue === undefined || typedParamValue === '' || typedParamValue === null
+
+      return paramValueIsEmpty ? defaultValue : typedParamValue
+    }) as ComputedRouteParam<T>
+
+    computedValue._paramName = key
+
+    const setRouteParamWith = (setter: (url: string) => void) => (newValue: any, options = {} as SetRouteParamOptions) => {
+      let currentPattern
+
+      if (options && options.pattern) {
+        currentPattern = { pattern: options.pattern }
+      } else {
+        switch (routePatterns.length) {
+          case 0:
+            currentPattern = { pattern: _routingStore.location.pathname }
+            break
+
+          case 1:
+            currentPattern = routePatternsWithRegex[0]
+            break
+
+          default:
+            currentPattern = routePatternsWithRegex.find(it => it.regex.test(_routingStore.location.pathname))
+            break
+        }
+      }
+
+      const params: any = routeParams.get()
+      const newValueFormatted = format && newValue ? format(newValue) : newValue
+      const currentParams = Array.isArray(options.cleanParams)
+        ? omit(
+            params,
+            options.cleanParams.map(it => it._paramName)
+          )
+        : options.cleanParams === true
+        ? {}
+        : params
+
+      currentPattern && setter(interpolateUrl(currentPattern!.pattern, { ...currentParams, [key]: newValueFormatted }))
     }
 
-    const params: any = routeParams.get()
-    const newValueFormatted = format && newValue ? format(newValue) : newValue
-    const currentParams = Array.isArray(options.cleanParams)
-      ? omit(
-          params,
-          options.cleanParams.map(it => it._paramName)
-        )
-      : options.cleanParams === true
-      ? {}
-      : params
+    computedValue.push = setRouteParamWith(_routingStore.history.push)
+    computedValue.replace = setRouteParamWith(_routingStore.history.replace)
 
-    currentPattern && setter(interpolateUrl(currentPattern!.pattern, { ...currentParams, [paramName]: newValueFormatted }))
+    baseDescriptor.value = computedValue
   }
-
-  computedValue.push = setRouteParamWith(_routingStore.history.push)
-  computedValue.replace = setRouteParamWith(_routingStore.history.replace)
-
-  return computedValue
 }
+
+export { computedRouteParam }
