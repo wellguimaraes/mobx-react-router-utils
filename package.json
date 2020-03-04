@@ -1,12 +1,13 @@
 {
   "name": "mobx-react-router-utils",
-  "version": "2.1.0",
+  "version": "3.0.0",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "prepare": "yarn build"
+    "test": "mocha --config ./mocha.config.json src/**/*.{test,spec}.{ts,tsx} --exit",
+    "prepublishOnly": "yarn test && yarn build"
   },
   "repository": {
     "url": "https://github.com/wellguimaraes/mobx-react-router-utils",
@@ -15,22 +16,31 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/chai": "^4.2.10",
     "@types/date-fns": "^2.6.0",
     "@types/history": "^4.7.5",
     "@types/lodash": "^4.14.149",
+    "@types/lodash.throttle": "^4.1.6",
     "@types/memoizee": "^0.4.3",
+    "@types/mocha": "^7.0.2",
     "@types/query-string": "^6.3.0",
+    "@types/sinon": "^7.5.2",
+    "chai": "^4.2.0",
     "date-fns": "^2.10.0",
     "lodash": "^4.17.15",
     "memoizee": "^0.4.14",
     "path-to-regexp": "^6.1.0",
-    "query-string": "^6.11.0"
+    "query-string": "^6.11.0",
+    "sinon": "^9.0.0",
+    "ts-node": "^8.6.2",
+    "tsconfig-paths": "^3.9.0"
   },
   "devDependencies": {
     "history": "^4.10.1",
     "mobx": "^5.15.4",
     "mobx-react-router": "^4.1.0",
-    "typescript": "^3.7.5"
+    "mocha": "^7.1.0",
+    "typescript": "^3.8.3"
   },
   "peerDependencies": {
     "history": "^4.10.1",
