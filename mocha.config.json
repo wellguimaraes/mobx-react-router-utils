@@ -1,5 +1,5 @@
 {
-  extension: ["ts"],
-  require: ["tsconfig-paths/register"],
-  watchFiles: ["src/**/*.ts", "src/**/*.tsx", "src/**/*.js", "src/**/*.jsx"]
+  "extension": ["ts"],
+  "require": ["ts-node/register"],
+  "watchFiles": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.js", "src/**/*.jsx"]
 }

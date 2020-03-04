@@ -3,10 +3,16 @@ import omitBy from 'lodash/omitBy'
 import pick from 'lodash/pick'
 import pickBy from 'lodash/pickBy'
 import { compile, Key, pathToRegexp } from 'path-to-regexp'
-import { parse as parseQueryString, stringify as toQueryString } from 'query-string'
+import {
+  parse as parseQueryString,
+  stringify as toQueryString,
+} from 'query-string'
 import { CLEAN_SYMBOL } from './constants'
+import { getRoutingStore } from './routingStore'
 
-const getLocationQuery = () => parseQueryString(window.location.search)
+const getLocationQuery = () => {
+  return parseQueryString(getRoutingStore().location.search) || {}
+}
 
 const ensureLeft = (str: string, prefix: string) => {
   if (str.startsWith(prefix)) return str
