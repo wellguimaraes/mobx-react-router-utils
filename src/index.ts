@@ -59,6 +59,11 @@ export const computedRouteParam = <T = string>(
     const currentParams = routeParams.get() || {}
     const newValueFormatted = format && newValue ? format(newValue) : newValue
     const newParams = sanitizeParams(currentParams as any, options.cleanParams)
+    const currentValueFormatted = format ? format(computedValue.get()) : computedValue.get()
+
+    if ((newValueFormatted || null) === (currentValueFormatted || null)) {
+      return
+    }
 
     return requestRouteUpdate(setter, {
       key: paramName,
