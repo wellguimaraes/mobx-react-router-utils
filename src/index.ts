@@ -1,3 +1,4 @@
+import memoizee from 'memoizee'
 import { computed } from 'mobx'
 import { pathToRegexp } from 'path-to-regexp'
 import { ComputedRouteOptions, ComputedRouteParam, IRouteSetter, SetRouteParamOptions, TypeComputedRouteOptions } from './__types'
@@ -18,27 +19,33 @@ function sanitizeParams(currentParams: any = {}, cleanParams?: boolean | Compute
 
 export const computedRouteParam = <T = string>(
   paramName: string,
-  { patterns: routePatterns, parse, format, defaultValue }: ComputedRouteOptions<T>
+  { patterns: routePatterns, parse: _parse, format, defaultValue, keepAlive }: ComputedRouteOptions<T>
 ) => {
+  const parse = _parse && memoizee<any>(_parse)
   const routeParams = getComputedRouteParams(routePatterns)
   const routePatternsWithRegex = routePatterns.map(it => ({ pattern: it, regex: pathToRegexp(it) }))
 
-  const computedValue = computed(() => {
-    const params: any = routeParams.get()
-    const paramValue = params && params[paramName]
+  const computedValue = computed(
+    () => {
+      const params: any = routeParams.get()
+      const paramValue = params && params[paramName]
 
-    let typedParamValue
+      let typedParamValue
 
-    try {
-      typedParamValue = paramValue && parse ? parse(paramValue) : paramValue
-    } catch (err) {
-      console.error(err)
+      try {
+        typedParamValue = paramValue && parse ? parse(paramValue) : paramValue
+      } catch (err) {
+        console.error(err)
+      }
+
+      const paramValueIsEmpty = typedParamValue === undefined || typedParamValue === '' || typedParamValue === null
+
+      return paramValueIsEmpty ? defaultValue : typedParamValue
+    },
+    {
+      keepAlive,
     }
-
-    const paramValueIsEmpty = typedParamValue === undefined || typedParamValue === '' || typedParamValue === null
-
-    return paramValueIsEmpty ? defaultValue : typedParamValue
-  }) as ComputedRouteParam<T>
+  ) as ComputedRouteParam<T>
 
   computedValue.__name = paramName
 
@@ -82,7 +89,7 @@ export const computedRouteParam = <T = string>(
 computedRouteParam.date = (paramName: string, options: TypeComputedRouteOptions<Date>) =>
   computedRouteParam(paramName, {
     ...options,
-    parse: d => new Date(d),
+    parse: (d: string) => new Date(d),
     format: d => (d instanceof Date ? d : new Date(d)).toISOString().substr(0, 10),
   })
 

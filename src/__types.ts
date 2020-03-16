@@ -5,7 +5,8 @@ export type ComputedRouteOptions<T = string> = {
   patterns: string[]
   parse?: (it: string) => T
   format?: (it: any) => string
-  defaultValue?: T
+  defaultValue?: T,
+  keepAlive?: boolean
 }
 export type SetRouteParamOptions = {
   enforcePattern?: string | undefined | null | false
