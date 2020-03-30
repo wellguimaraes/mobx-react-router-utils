@@ -67,8 +67,9 @@ export const computedRouteParam = <T = string>(
     const newValueFormatted = format && newValue ? format(newValue) : newValue
     const newParams = sanitizeParams(currentParams as any, options.cleanParams)
     const currentValueFormatted = format ? format(computedValue.get()) : computedValue.get()
+    const enforceUpdate = options.enforcePattern && !pathToRegexp(options.enforcePattern).test(getRoutingStore().location.pathname)
 
-    if ((newValueFormatted || null) === (currentValueFormatted || null)) {
+    if (!enforceUpdate && (newValueFormatted || null) === (currentValueFormatted || null)) {
       return
     }
 
@@ -89,8 +90,8 @@ export const computedRouteParam = <T = string>(
 computedRouteParam.date = (paramName: string, options: TypeComputedRouteOptions<Date>) =>
   computedRouteParam(paramName, {
     ...options,
-    parse: (d: string) => new Date(d),
-    format: d => (d instanceof Date ? d : new Date(d)).toISOString().substr(0, 10),
+    parse: (d: string) => new Date(d + 'T12:00:00.000Z'),
+    format: d => (d ? (d instanceof Date ? d : new Date(d)).toISOString().substr(0, 10) : ''),
   })
 
 computedRouteParam.int = (paramName: string, options: TypeComputedRouteOptions<number>) =>
