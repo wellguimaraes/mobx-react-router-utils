@@ -67,9 +67,8 @@ export const computedRouteParam = <T = string>(
     const newValueFormatted = format && newValue ? format(newValue) : newValue
     const newParams = sanitizeParams(currentParams as any, options.cleanParams)
     const currentValueFormatted = format ? format(computedValue.get()) : computedValue.get()
-    const enforceUpdate = options.enforcePattern && !pathToRegexp(options.enforcePattern).test(getRoutingStore().location.pathname)
 
-    if (!enforceUpdate && (newValueFormatted || null) === (currentValueFormatted || null)) {
+    if (!options.enforce && !options.cleanParams && (newValueFormatted || null) === (currentValueFormatted || null)) {
       return
     }
 

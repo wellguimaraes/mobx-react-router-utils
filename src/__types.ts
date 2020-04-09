@@ -9,6 +9,7 @@ export type ComputedRouteOptions<T = string> = {
   keepAlive?: boolean
 }
 export type SetRouteParamOptions = {
+  enforce?: boolean
   enforcePattern?: string | undefined | null | false
   cleanParams?: boolean | ComputedRouteParam<any>[]
 }
