@@ -6,15 +6,17 @@ import { CLEAN_SYMBOL } from './constants'
 import { getComputedRouteParams } from './getComputedRouteParams'
 import { requestRouteUpdate } from './routeUpdate'
 import { getRoutingStore } from './routingStore'
+import fromPairs from 'lodash/fromPairs'
+import toPairs from 'lodash/toPairs'
 
 function sanitizeParams(currentParams: any = {}, cleanParams?: boolean | ComputedRouteParam<any>[]) {
-  const cleaningKeys = Array.isArray(cleanParams) ? Object.fromEntries(cleanParams.map(it => [it.__name])) : {}
+  const cleaningKeys = Array.isArray(cleanParams) ? fromPairs(cleanParams.map(it => [it.__name])) : {}
 
-  const newParams = Object.entries(currentParams).map(([k, v]) =>
+  const newParams = toPairs(currentParams).map(([k, v]) =>
     cleanParams === true ? [k, CLEAN_SYMBOL] : cleaningKeys.hasOwnProperty(k) ? [k, CLEAN_SYMBOL] : [k, v]
   )
 
-  return Object.fromEntries(newParams)
+  return fromPairs(newParams)
 }
 
 export const computedRouteParam = <T = string>(
@@ -67,8 +69,10 @@ export const computedRouteParam = <T = string>(
     const newValueFormatted = format && newValue ? format(newValue) : newValue
     const newParams = sanitizeParams(currentParams as any, options.cleanParams)
     const currentValueFormatted = format ? format(computedValue.get()) : computedValue.get()
+    const hasParamsToClean = options.cleanParams === true || (options.cleanParams as any[])?.length
+    const valueDidNotChange = (newValueFormatted || null) === (currentValueFormatted || null)
 
-    if (!options.enforce && !options.cleanParams && (newValueFormatted || null) === (currentValueFormatted || null)) {
+    if (valueDidNotChange && !hasParamsToClean && !options.enforce) {
       return
     }
 
