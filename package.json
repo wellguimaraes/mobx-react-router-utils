@@ -1,6 +1,6 @@
 {
   "name": "mobx-react-router-utils",
-  "version": "3.1.9",
+  "version": "3.2.0",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -37,7 +37,7 @@
   },
   "devDependencies": {
     "history": "^4.10.1",
-    "mobx": "^5.15.4",
+    "mobx": "^6.1.7",
     "mobx-react-router": "^4.1.0",
     "mocha": "^7.1.0",
     "typescript": "^3.8.3"
