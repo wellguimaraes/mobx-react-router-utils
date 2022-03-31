@@ -1,4 +1,4 @@
-import memoizee from 'memoizee'
+import memoize from 'moize'
 import { computed } from 'mobx'
 import { match } from 'path-to-regexp'
 import { parse as parseQueryString } from 'query-string'
@@ -6,7 +6,7 @@ import { getRoutingStore } from './routingStore'
 
 const _emptyObject = {}
 
-export const getComputedRouteParams = memoizee((routePatterns: string[]) => {
+export const getComputedRouteParams = memoize((routePatterns: string[]) => {
   const matchers = routePatterns.map(
     it => match(it, { decode: decodeURIComponent }))
 

@@ -1,11 +1,11 @@
 {
   "name": "mobx-react-router-utils",
-  "version": "3.2.0",
+  "version": "4.1.0",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc",
+    "build": "tsup src/index.ts",
     "test": "mocha --config ./mocha.config.json src/**/*.{test,spec}.{ts,tsx} --exit",
     "prepublishOnly": "yarn test && yarn build"
   },
@@ -28,11 +28,11 @@
     "chai": "^4.2.0",
     "date-fns": "^2.10.0",
     "lodash": "^4.17.15",
-    "memoizee": "^0.4.14",
+    "moize": "^6.1.0",
     "path-to-regexp": "^6.1.0",
     "query-string": "^6.11.0",
     "sinon": "^9.0.0",
-    "ts-node": "^8.6.2",
+    "ts-node": "^10.7.0",
     "tsconfig-paths": "^3.9.0"
   },
   "devDependencies": {
@@ -40,7 +40,8 @@
     "mobx": "^6.1.7",
     "mobx-react-router": "^4.1.0",
     "mocha": "^7.1.0",
-    "typescript": "^3.8.3"
+    "tsup": "^5.12.1",
+    "typescript": "^4.6.3"
   },
   "peerDependencies": {
     "history": "^4.10.1",

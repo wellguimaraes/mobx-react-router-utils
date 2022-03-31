@@ -1,4 +1,4 @@
-import memoizee from 'memoizee'
+import memoize from 'moize'
 import { computed } from 'mobx'
 import { pathToRegexp } from 'path-to-regexp'
 import { ComputedRouteOptions, ComputedRouteParam, IRouteSetter, SetRouteParamOptions, TypeComputedRouteOptions } from './__types'
@@ -23,7 +23,7 @@ export const computedRouteParam = <T = string>(
   paramName: string,
   { patterns: routePatterns, parse: _parse, format, defaultValue, keepAlive }: ComputedRouteOptions<T>
 ) => {
-  const parse = _parse && memoizee<any>(_parse)
+  const parse = _parse && memoize(_parse)
   const routeParams = getComputedRouteParams(routePatterns)
   const routePatternsWithRegex = routePatterns.map(it => ({ pattern: it, regex: pathToRegexp(it) }))
 
