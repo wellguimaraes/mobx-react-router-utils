@@ -1,3 +1,4 @@
+import mapValues from 'lodash/mapValues'
 import omit from 'lodash/omit'
 import omitBy from 'lodash/omitBy'
 import pick from 'lodash/pick'
@@ -27,7 +28,7 @@ export const interpolateUrl = (pattern: string, params: any) => {
   const namesOfPathKeys = pathKeys.map(it => it.name)
 
   const queryParams = omit(params, namesOfPathKeys)
-  const pathParams = pick(params, namesOfPathKeys)
+  const pathParams = mapValues(pick(params, namesOfPathKeys), v => encodeURIComponent(v))
 
   const isIgnorable = (value: any) =>
     value === null || value === undefined || value === '' || value === CLEAN_SYMBOL || value === 'false' || value === false
