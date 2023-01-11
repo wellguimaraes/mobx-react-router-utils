@@ -1,13 +1,14 @@
-import memoize from 'moize'
+import fromPairs from 'lodash/fromPairs'
+import toPairs from 'lodash/toPairs'
 import { computed } from 'mobx'
+import memoize from 'moize'
 import { pathToRegexp } from 'path-to-regexp'
 import { ComputedRouteOptions, ComputedRouteParam, IRouteSetter, SetRouteParamOptions, TypeComputedRouteOptions } from './__types'
 import { CLEAN_SYMBOL } from './constants'
 import { getComputedRouteParams } from './getComputedRouteParams'
+import { getValueFormatted } from './getValueFormatted'
 import { requestRouteUpdate } from './routeUpdate'
 import { getRoutingStore } from './routingStore'
-import fromPairs from 'lodash/fromPairs'
-import toPairs from 'lodash/toPairs'
 
 function sanitizeParams(currentParams: any = {}, cleanParams?: boolean | ComputedRouteParam<any>[]) {
   const cleaningKeys = Array.isArray(cleanParams) ? fromPairs(cleanParams.map(it => [it.__name])) : {}
@@ -63,16 +64,25 @@ export const computedRouteParam = <T = string>(
     return routePatternsWithRegex
   }
 
-  const setRouteParamWith = (setter: IRouteSetter) => (newValue: T | undefined | null, options = {} as SetRouteParamOptions) => {
-    const applicablePatterns = getCurrentRoutePattern(options.enforcePattern)
-    const currentParams = routeParams.get() || {}
-    const newValueFormatted = format && newValue ? format(newValue) : newValue
-    const newParams = sanitizeParams(currentParams as any, options.cleanParams)
-    const currentValueFormatted = format ? format(computedValue.get()) : computedValue.get()
-    const hasParamsToClean = options.cleanParams === true || (options.cleanParams as any[])?.length
-    const valueDidNotChange = (newValueFormatted || null) === (currentValueFormatted || null)
+  const setRouteParamWith = (setter: IRouteSetter) => (newValue: T | undefined | null, options?: SetRouteParamOptions) => {
+    const {
+      cleanParams,
+      enforce,
+      enforcePattern,
+      falsyValuesAllowed = [],
+    }: SetRouteParamOptions = { falsyValuesAllowed: [], ...options }
 
-    if (valueDidNotChange && !hasParamsToClean && !options.enforce) {
+    const applicablePatterns = getCurrentRoutePattern(enforcePattern)
+    const currentParams = routeParams.get() || {}
+    const newValueFormatted = format ? getValueFormatted(newValue, format, falsyValuesAllowed) : newValue
+    const newParams = sanitizeParams(currentParams as any, cleanParams)
+    const currentValueFormatted = format
+      ? getValueFormatted(computedValue.get(), format, falsyValuesAllowed)
+      : computedValue.get()
+    const hasParamsToClean = cleanParams === true || (cleanParams as any[])?.length
+    const valueDidNotChange = (newValueFormatted ?? null) === (currentValueFormatted ?? null)
+
+    if (valueDidNotChange && !hasParamsToClean && !enforce) {
       return
     }
 
