@@ -1,6 +1,6 @@
 import { FalsyValue, FormatFunction } from './__types'
 
-export const getValueFormatted = (value: unknown, formatFn: FormatFunction, falsyValuesAllowed: FalsyValue[]) => {
+export const getValueFormatted = <T>(value: T | null | undefined, formatFn: FormatFunction<T>, falsyValuesAllowed: FalsyValue[]) => {
   if (value) {
     return formatFn(value)
   }

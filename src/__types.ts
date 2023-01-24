@@ -9,12 +9,12 @@ export enum FalsyValue {
   'Zero',
 }
 
-export type FormatFunction = (it: any) => string
+export type FormatFunction<T> = (it: T | null | undefined) => string
 export type IRouteSetter = (url: string) => void
 export type ComputedRouteOptions<T = string> = {
   patterns: string[]
   parse?: (it: string) => T
-  format?: FormatFunction
+  format?: FormatFunction<T>
   defaultValue?: T
   keepAlive?: boolean
 }
