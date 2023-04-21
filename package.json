@@ -1,6 +1,6 @@
 {
   "name": "mobx-react-router-utils",
-  "version": "3.1.9",
+  "version": "3.2.0",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

@@ -12,7 +12,7 @@ export const getComputedRouteParams = memoizee((routePatterns: string[]) => {
 
   return computed(() => {
     let pathParams = {}
-    let queryParams = parseQueryString(getRoutingStore().location.search)
+    let queryParams = {}
 
     for (let match of matchers) {
       let matchResult: false | { params: any } = match(
@@ -21,6 +21,7 @@ export const getComputedRouteParams = memoizee((routePatterns: string[]) => {
       if (matchResult === false) continue
 
       pathParams = matchResult.params
+      queryParams = parseQueryString(getRoutingStore().location.search)
     }
 
     const pathParamsIsEmpty = Object.keys(pathParams).length === 0
