@@ -1022,10 +1022,10 @@ mkdirp@0.5.1:
   dependencies:
     minimist "0.0.8"
 
-mobx-react-router@^4.1.0:
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/mobx-react-router/-/mobx-react-router-4.1.0.tgz#de014848207d8aa32f6a4e67ed861bd2cb6516e5"
-  integrity sha512-2knsbDqVorWLngZWbdO8tr7xcZXaLpVFsFlCaGaoyZ+EP9erVGRxnlWGqKyFObs3EH1JPLyTDOJ2LPTxb/lB6Q==
+mobx-react-router@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/mobx-react-router/-/mobx-react-router-5.0.0.tgz#846879b3ee004c96aa4eddd255802a4242a90d27"
+  integrity sha512-JO336+DVaTnshQtl1j1reEHaNHgeGpdfSmTlx8VA/cwIC6Dk5mEMk4gvW0yPruFdUJJVmA2I/7yZo4J7BeVe9Q==
 
 mobx@^6.1.7:
   version "6.3.0"
